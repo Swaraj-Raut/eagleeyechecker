@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Plagiarism Detection Tool</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    /* Additional CSS for row flex layout */
+    .image-wrap-benifits {
+      text-align: center;
+      padding: 20px;
+    }
+    .innbox1 {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      justify-content: center;
+    }
+    .pc-benifits {
+      flex: 1 1 300px; /* Responsive and flexible width */
+      max-width: 300px;
+    }
+    /* Logo, About Us, and Login/Register styling */
+    .header-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px;
+      background-color: #c4ebec;
+    }
+    .logo-section {
+      display: flex;
+      align-items: center;
+    }
+    .logo-section img {
+      width: 80px;
+      height: auto;
+    }
+    .about-us {
+      margin-left: 20px;
+      text-align: left;
+    }
+    .auth-links {
+      display: flex;
+      gap: 10px;
+      margin-left: auto;
+    }
+    .auth-links a {
+      padding: 10px 20px;
+      border-radius: 5px;
+      text-decoration: none;
+      color: white;
+      background-color: #007bff;
+    }
+    .auth-links a:hover {
+      background-color: #0056b3;
+    }
+
+    /* Modal Styling */
+    .modal {
+      display: none; /* Hidden by default */
+      position: fixed;
+      z-index: 1;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.4);
+      padding-top: 60px;
+    }
+
+    .modal-content {
+      background-color: white;
+      margin: 5% auto;
+      padding: 20px;
+      border: 1px solid #888;
+      width: 80%;
+      max-width: 500px;
+    }
+
+    .close {
+      color: #aaa;
+      float: right;
+      font-size: 28px;
+      font-weight: bold;
+    }
+
+    .close:hover,
+    .close:focus {
+      color: black;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+  </style>
+</head>
+<body>
+  <!-- Header section with Logo, About Us, and Login/Register -->
+  <div class="header-top">
+    <div class="logo-section">
+      <img src="eagleeye.png" alt="Website Logo"> <!-- Replace with actual path to image -->
+      <div class="about-us">
+        <h2>About Us</h2>
+        <p>Welcome to our Plagiarism Detection Tool! Our platform offers a robust solution for detecting and preventing plagiarism, whether you're a student, teacher, or content creator. With our tool, you can easily check your work to ensure originality and academic integrity.</p>
+      </div>
+    </div>
+    <div class="auth-links">
+      <a href="#" id="loginBtn">Login</a>
+      <a href="#" id="registerBtn">Register</a>
+    </div>
+  </div>
+
+  <!-- Modal for Login and Register -->
+  <div id="loginModal" class="modal">
+    <div class="modal-content">
+      <span class="close" id="loginClose">&times;</span>
+      <h2>Login Information</h2>
+      <p>Enter your credentials to log in to your account.</p>
+      <form id="loginForm">
+        <label for="loginEmail">Email:</label>
+        <input type="email" id="loginEmail" name="email" required><br><br>
+        <label for="loginPassword">Password:</label>
+        <input type="password" id="loginPassword" name="password" required><br><br>
+        <button type="submit">Login</button>
+      </form>
+    </div>
+  </div>
+
+ <!-- Register Modal -->
+<div id="registerModal" class="modal">
+  <div class="modal-content">
+    <span class="close" id="registerClose">&times;</span>
+    <h2>Register Information</h2>
+    <p>Fill out the form to create a new account.</p>
+    <form id="registerForm">
+      <label for="firstName">First Name:</label>
+      <input type="text" id="firstName" name="firstName" required><br><br>
+      
+      <label for="lastName">Last Name:</label>
+      <input type="text" id="lastName" name="lastName" required><br><br>
+      
+      <label for="dob">Date of Birth:</label>
+      <input type="date" id="dob" name="dob" required><br><br>
+      
+      <label for="registerEmail">Email:</label>
+      <input type="email" id="registerEmail" name="email" required><br><br>
+      
+      <label for="phone">Phone Number:</label>
+      <input type="tel" id="phone" name="phone" pattern="[0-9]{10}" required><br><br>
+      
+      <label for="profilePic">Profile Picture:</label>
+      <input type="file" id="profilePic" name="profilePic" accept="image/*"><br><br>
+      
+      <label for="registerPassword">Password:</label>
+      <input type="password" id="registerPassword" name="password" required><br><br>
+      
+      <label for="confirmPassword">Confirm Password:</label>
+      <input type="password" id="confirmPassword" name="confirmPassword" required><br><br>
+      
+      <label for="securityQuestion">Security Question (for account recovery):</label>
+      <select id="securityQuestion" name="securityQuestion" required>
+        <option value="">Select a question</option>
+        <option value="motherMaidenName">What is your mother's maiden name?</option>
+        <option value="petName">What is the name of your first pet?</option>
+        <option value="cityBorn">In which city were you born?</option>
+      </select><br><br>
+
+      <label for="securityAnswer">Answer:</label>
+      <input type="text" id="securityAnswer" name="securityAnswer" required><br><br>
+      
+      <label for="agreeTerms">
+        <input type="checkbox" id="agreeTerms" name="agreeTerms" required>
+        I agree to the <a href="/terms" target="_blank">Terms and Conditions</a>.
+      </label><br><br>
+      
+      <button type="submit">Register</button>
+    </form>
+  </div>
+</div>
+
+  
+
+  <script>
+    // Get the modal
+    var loginModal = document.getElementById("loginModal");
+    var registerModal = document.getElementById("registerModal");
+
+    // Get the buttons that open the modals
+    var loginBtn = document.getElementById("loginBtn");
+    var registerBtn = document.getElementById("registerBtn");
+
+    // Get the <span> element that closes the modal
+    var loginClose = document.getElementById("loginClose");
+    var registerClose = document.getElementById("registerClose");
+
+    // When the user clicks on the login button, open the login modal
+    loginBtn.onclick = function() {
+      loginModal.style.display = "block";
+    }
+
+    // When the user clicks on the register button, open the register modal
+    registerBtn.onclick = function() {
+      registerModal.style.display = "block";
+    }
+
+    // When the user clicks on <span> (x), close the modal
+    loginClose.onclick = function() {
+      loginModal.style.display = "none";
+    }
+    registerClose.onclick = function() {
+      registerModal.style.display = "none";
+    }
+
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function(event) {
+      if (event.target == loginModal) {
+        loginModal.style.display = "none";
+      }
+      if (event.target == registerModal) {
+        registerModal.style.display = "none";
+      }
+    }
+  </script>
+</body>
+
+<body>
+  <h1 class="heading">Plagiarism Detection Tool</h1>
+
+  <div class="container">
+    <button id="themeToggle" onclick="toggleTheme()">
+      <i id="themeIcon" class="fas fa-moon"></i> <!-- Moon icon for light mode -->
+    </button>
+
+    <form id="plagiarismForm">
+      <label for="textInput">Input text or upload a PDF:</label><br><br>
+      <textarea id="textInput" placeholder="Paste your text here..." rows="10" cols="50"></textarea><br><br>
+      <input type="file" id="fileInput" accept=".pdf"><br><br>
+      <button type="button" id="clicked" onclick="checkPlagiarism()">Check Plagiarism</button>
+    </form>
+    <div id="result"></div>
+  </div>
+  <div class="container0">
+    <div class="plagiarism-descr__heading">
+        <h2 class="plagiarism-descr__title">How to avoid plagiarism?</h2>
+    </div>
+
+    <div class="plagiarism-descr__rows">
+        <div class="plagiarism-descr__row">
+            <h3 class="plagiarism-descr__list-title">Proper citation style</h3>
+            <p class="plagiarism-descr__list-text">Avoid plagiarism by always listing the source and formatting it correctly when you are note-taking. Take care of the proper formatting and citation style when using content from outside sources.</p>
+        </div>
+        
+        <div class="plagiarism-descr__row">
+            <h3 class="plagiarism-descr__list-title">Write on your own</h3>
+            <p class="plagiarism-descr__list-text">Avoid borrowing and overusing large pieces of content from outside sources, especially from Wikipedia. Write your own thoughts and use sources only to support your opinion (remember to cite it though!).</p>
+        </div>
+    </div>
+</div>
+
+
+  <div class="container1">
+    <div class="box1">
+      <img src="p1.png" width="max-content" height="300px">
+    </div>
+    <div class="inncont">
+      <h1>How Plagiarism Checker Works?</h1>
+      <h3>Enter text or select pdf into plagiarism detection tool</h3>
+      <p class="plag1">
+        We make it simple. Just copy and paste all content from your document into our plagiarism checker and hit the
+        ‘Check Plagiarism’ button to get started.
+      </p>
+    </div>
+  </div>
+
+
+ 
+
+
+  <div class="container2">
+    <div class="inncont">
+      <h1>How Plagiarism Checker Works?</h1>
+      <h3>Evaluate text and pdf for plagiarism</h3>
+      <p>Our plagiarism detection tool uses DeepSearch™ Technology to identify any content throughout your document that
+        might be plagiarized. </p>
+    </div>
+    <div class="box1">
+      <img src="p2.png" width="max-content" height="300px">
+    </div>
+  </div>
+
+  <div class="container3">
+    <div class="box1">
+      <img src="p3.jpg" width="max-content" height="300px">
+    </div>
+    <div class="inncont">
+      <h1>How Plagiarism Checker Works?</h1>
+      <h3>Accurate plagiarism results</h3>
+      <p>After evaluating the text against billions of internet sources, you will be provided with a plagiarism score
+        showing the percentage of text that is an exact or near-match to existing text online.</p>
+    </div>
+  </div>
+
+  <div class="container4">
+    <div class="inncont">
+      <h1 class="display-4">Plagiarism Checker Benefits</h1>
+      <p>Whether producing original content or verifying that of others, there’s a lot to gain from using a plagiarism
+        checker. Accurate, automatic detection of duplicate content facilitates the copy-checking process for teachers,
+        students, content writers, and more. Results showing the exact percentage of plagiarized content allows users to
+        see exactly how much text has been copied and where they need to re-word.</p>
+
+      <div class="innbox1">
+        <div class="col-12 col-md-4 pc-benifits">
+          <div class="image-wrap-benifits">
+            <img src="Icon_For_Teachers.png" alt="teacher">
+            <h3><a style="color: #fff;" href="/plagiarism-checker/teachers">For Teachers</a></h3>
+            <p>Before homework can be graded for quality, it must first be confirmed as original. Our easy-to-use tool
+              arms teachers with a simple, effective way to verify and grade students’ work. Educators at all levels can
+              benefit from ensuring academic integrity through a comprehensive plagiarism check.</p>
+          </div>
+        </div>
+        <div class="col-12 col-md-4 pc-benifits">
+          <div class="image-wrap-benifits">
+            <img src="Icon_For_Students.png" alt="student">
+            <h3><a style="color: #fff;" href="/plagiarism-checker/students">For Students</a></h3>
+            <p>While the prevalence of academic plagiarism is on the rise, much of it is arguably unintentional. A
+              simple, yet accurate and comprehensive, plagiarism checker offers students peace of mind when
+              submitting written content for grading.</p>
+          </div>
+        </div>
+        <div class="col-12 col-md-4 pc-benifits">
+          <div class="image-wrap-benifits">
+            <img src="Icon_For_ContentWriters.png" alt="copywriter">
+            <h3><a style="color: #fff;" href="/plagiarism-checker/copywriters">For Copywriters</a></h3>
+            <p>Plagiarism risk is not restricted to academia. Anyone tasked with writing for an individual or
+              business has an ethical and legal responsibility to produce original content. Our plagiarism checker gives
+              content writers a quick and easy method to prevent copyright infringement.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container5">
+      <h1 class="display-4">Types of Plagiarism</h1>
+      <h2>It’s important to understand that plagiarism expands far beyond just copying someone else’s work
+        word-for-word. There are several different types of plagiarism that should be avoided.</h2>
+      <div class="row mb-5">
+        <div class="col-12 col-md-6 pc-types-wrap">
+          <img src="Icon_SelfPlagiarism.png" alt="Self-Plagiarism" class="icon">
+          <h3>Self-Plagiarism</h3>
+          <p>Many believe that, as long as they produced the work at some point in the past, they can include it in future pieces. However, even if you were the original author, that original work must be cited in order to not be flagged as plagiarism.<br><br>
+          Treat your past self as a totally separate author; be sure to include all relevant citations and quotations, the same as you would for any other source.</p>
+        </div>
+        
+        <div class="col-12 col-md-6 pc-types-wrap">
+          <img src="Icon_PatchworkPlagiarism.png" alt="Patchwork Plagiarism" class="icon">
+          <h3>Patchwork Plagiarism</h3>
+          <p>Patchwork plagiarism is the act of piecing together a "patchwork" of existing content to form something new. Assembling unoriginal content in this manner often involves some paraphrasing, with only slight changes.<br><br>
+          This type of plagiarism can be tricky and can certainly occur unintentionally, especially in academia. Since academic writing is largely based on the research of others, a well-meaning student can inadvertently end up plagiarizing.</p>
+        </div>
+      </div>
+      
+      <div class="row">
+        <div class="col-12 col-md-6 pc-types-wrap">
+          <img src="Icon_MosaicPlagiarism.png" alt="Mosaic Plagiarism" class="icon">
+          <h3>Mosaic Plagiarism</h3>
+          <p>Mosaic plagiarism is synonymous with patchwork plagiarism. It describes the process of loosely rearranging or restating another's work without issuing proper credit. It can occur accidentally or intentionally.<br><br>
+          For authors, mosaic plagiarism endangers their academic integrity or reputation as a writer. For those checking content originality, such as teachers, mosaic plagiarism can easily appear to be original content, which can make mosaic plagiarism especially difficult to detect manually.</p>
+        </div>
+        
+        <div class="col-12 col-md-6 pc-types-wrap">
+          <img src="Frame.png" alt="Accidental Plagiarism" class="icon">
+          <h3>Accidental Plagiarism</h3>
+          <p>Plagiarism doesn’t have to be intentional to still be considered plagiarism — even in early academia, where students are just learning how to properly cite others’ work. While there may be no ill intent from the student, most schools have policies explicitly treating accidental plagiarism the same as intentional plagiarism.<br><br>
+          Students are expected to know how to properly issue credit to other authors. Similarly, content writers risk damage to their reputation if they produce plagiarized content, regardless of intent.</p>
+        </div>
+      </div>
+    </div>
+    
+  
+    <div class="container6">
+      <div class="main_area mx-auto hiw mt-4 mtc mb-5">
+          <h2 class="hiw_heading text-center fw_700">Consequences of Plagiarism</h2>
+          <div class="hiw_htxt mx-auto text-center mb-5 fw_500">Without any delay, let's go through all the possible effects you would have to face if you copy:</div>
+  
+          <!-- Academic Consequence -->
+          <div class="container2">
+            <div class="inncont">
+              <h2 class="hiw_box_t mb-3 fw_600 mt-4">Academic</h2>
+              <p>Today, copyrighted content has become a constant problem in educational institutions. Students create many assignments using a lot of research in a short period. Many schools/institutions, such as Duke University, have judicial affairs offices. They will review each case of plagiarism and fix penalties.
+               <p> Plagiarism in academics carries serious consequences, including failing grades, suspension, or even expulsion. Legally, it may lead to copyright infringement lawsuits and financial penalties. It damages reputations, leading to loss of trust, diminished career opportunities, and in severe cases, public embarrassment. Plagiarism can result in the loss of scholarships, research funding, and academic honors. Beyond the immediate penalties, it also stunts personal and intellectual growth by depriving students of valuable learning experiences. Academic integrity is essential for a credible, rewarding educational journey, so understanding and avoiding plagiarism is crucial.</p> 
+              </p>
+            </div>
+            <div class="box1">
+              <img src="0.png" width="max-content" height="300px">
+            </div>
+          </div>
+  
+          <!-- Personal Consequence -->
+          <div class="container3">
+            <div class="box1">
+              <img src="1.png" width="max-content" height="300px">
+            </div>
+            <div class="inncont">
+              <h2 class="hiw_box_t mb-3 fw_600 mt-4">Personal</h2>
+              <p>Most of the outcomes of plagiarism occur</a> once the replication is caught. Institutions have noted that students who duplicate data often fail to learn research and writing skills. Once they leave the institution, all those students lose the ability to create original content because they have only cheated before.</p>
+           <p>
+            Plagiarism in academics can lead to severe consequences, such as failing grades, suspension, expulsion, and a damaged reputation. It can result in lost scholarships, research funding, and future academic opportunities. Plagiarism undermines personal growth and academic integrity, making it crucial to maintain originality and properly cite sources.</p>
+            </div>
+          </div>
+        
+          <!-- Professional Consequence -->
+          <div class="container2">
+            <div class="inncont">
+              <h2 class="hiw_box_t mb-3 fw_600 mt-4">Professional</h2>
+              <p>Countless journalists, academics, writers, and creators have had their reputations damaged by plagiarism accusations. Not only do plagiarists disrupt their ongoing work by getting fired or terminated. They also find it difficult to get work in the future. A particularly egregious instance of plagiarism, or worse, can destroy a person's professional image. It also forces them to change careers to avoid the stigma of plagiarism.</p>
+              <p>
+                In professional settings, plagiarism can lead to job termination, loss of credibility, damaged reputation, and legal repercussions. It may also hinder career advancement and destroy trust among colleagues and clients, impacting long-term professional opportunities. Maintaining originality and properly crediting sources is essential for credibility and career growth.</p>
+            </div>
+            <div class="box1">
+              <img src="2.png" width="max-content" height="300px">
+            </div>
+          </div>
+          <!-- Legal Consequence -->
+            <div class="container3">
+            <div class="box1">
+              <img src="3.png" width="max-content" height="300px">
+            </div>
+            <div class="inncont">
+              <h2 class="hiw_box_t mb-3 fw_600 mt-4">Legal</h2>
+              <p>Apart from all the professional and personal difficulties that may arise in certain cases, there are also legal consequences. Copying copyrighted material for profit may result in the plagiarist having to pay some financial losses. In some cases, copying data can subject the plagiarist to criminal prosecution. And the punishment can range from charges to imprisonment.</p>
+              <p>So, before submitting any content, do a plagiarism check once to see if you have copied it or not. It can protect you from all kinds of harm. You won't have to wait long for results using a duplicate content checker. You can take advantage of this plagiarism checker free and save yourself from embarrassment.</p>
+            </div>
+          </div>
+      </div>
+  </div>
+  
+
+  
+  
+  
+</head>
+
+
+  <div class="footer">
+    <div class="footer-column footer-logo">
+        <img src="eagleeye.png" alt="Logo">
+        <p class="footer-text">EAGLE EYE</p>
+    </div>
+    <div class="footer-column">
+        <h3>Products</h3>
+        <ul>
+            <li><a >Paraphrasing Tool</a></li>
+            <li><a href="#">pdf Checker</a></li>
+            <li><a href="#">Plagiarism Checker</a></li>
+            <li><a href="#">Text Checker</a></li>
+            
+        </ul>
+    </div>
+    <div class="footer-column">
+        <h3>Resources</h3>
+        <ul>
+            <li><a href="#">Paraphrasing API</a></li>
+            <li><a href="#">Citation Generator</a></li>
+            <li><a href="#">Affiliate Program</a></li>
+            <li><a href="#">About Us</a></li>
+        </ul>
+    </div>
+    <div class="footer-column">
+        <h3>Contact Us</h3>
+        <ul>
+            <li>KIT College of Engineering, Kolhapur 416234</li>
+            <li><a href="#">Contact Us</a></li>
+            <li><a href="#">Privacy Policy</a></li>
+            <li><a href="#">Terms & Conditions</a></li>
+            <li><a href="#">Refund Policy</a></li>
+        </ul>
+        <div class="social-icons">
+            <a href="#"><i class="fab fa-facebook-f"></i></a>
+            <a href="#"><i class="fab fa-linkedin-in"></i></a>
+        </div>
+    </div>
+</div>
+<div class="copyright">
+    Copyright © by EagleEye.io | All rights reserved.
+</div>
+
+  
+  
+
+  <script src="scripts.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.min.js"></script>
+</body>
+
+</html>
